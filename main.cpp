@@ -4,12 +4,16 @@ using namespace std;
 
 template <typename t>
 class myStack
-{ // don't forget to check for the access modifiers
-public:
+{
+private:
     t *_top;
+    int n;
+
+public:
     myStack()
     {
         _top = NULL;
+        n = 0;
     }
     bool isEmpty() const
     {
@@ -19,26 +23,31 @@ public:
     {
         return _top;
     }
-    void push(char data)
+    void push(t *node)
     {
-        t *node = new t(data);
         if (!isEmpty())
         {
             node->next = _top;
         }
         _top = node;
+        n++;
     }
     void pop()
     {
         t *del = _top;
         _top = _top->next;
         delete del;
+        n--;
+    }
+    int size() const
+    {
+        return n;
     }
 };
 
 class stackNode
 {
-private:
+public:
     char data;
     stackNode *next;
     stackNode(char data = '0')
@@ -46,8 +55,6 @@ private:
         this->data = data;
         next = NULL;
     }
-    template <typename t>
-    friend class myStack;
 };
 
 bool isBalanced(const string &s)
@@ -57,7 +64,8 @@ bool isBalanced(const string &s)
     {
         if (s[i] == '(')
         {
-            st.push(s[i]);
+            stackNode *node = new stackNode(s[i]);
+            st.push(node);
         }
         else if (s[i] == ')')
         {
